@@ -305,16 +305,6 @@ template {
 [hidden] {
   display: none; }
 
-@-webkit-keyframes waves {
-  0% {
-    border-radius: 30% 70% 70% 30%/30% 30% 70% 70%; }
-  25% {
-    border-radius: 70% 30% 30% 70%/70% 70% 30% 30%; }
-  50% {
-    border-radius: 30% 70% 70% 30%/30% 30% 70% 70%; }
-  100% {
-    border-radius: 70% 30% 30% 70%/70% 70% 30% 30%; } }
-
 @keyframes waves {
   0% {
     border-radius: 30% 70% 70% 30%/30% 30% 70% 70%; }
@@ -405,8 +395,7 @@ body {
   margin: 0 32px 16px 0;
   position: relative; }
   .photo__img {
-    -webkit-animation: waves 30s infinite alternate ease-in-out;
-            animation: waves 30s infinite alternate ease-in-out;
+    animation: waves 30s infinite alternate ease-in-out;
     border-radius: 30% 70% 70% 30%/30% 30% 70% 70%;
     height: 148px;
     width: 148px;
