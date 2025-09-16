@@ -8,10 +8,6 @@ Wizytówka, która w widoku mobilnym zmienia układ na pionowy - [widok on-line]
 
 HTML5 i CSS3 (w tym Flexbox) z użyciem preprocesora Sass.
 
-## Podgląd strony
-
-![Screenshot](https://github.com/kasiaizak/business-card/blob/master/github/screenshot.jpg)
-
 ## Uruchomienie strony lokalnie z podglądem zmian na żywo (dla developerów korzystających z Node.js)
 
 Jeśli nie masz jeszcze zainstalowanego Node.js to nic straconego... :) Tu znajduje się instalka i można szybko to nadrobić: [oficjalna strona Node.js](https://nodejs.org/en/).
