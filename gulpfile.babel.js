@@ -7,12 +7,13 @@ import browserSync from "browser-sync";
 import gulpSass from "gulp-sass";
 import dartSass from "sass";
 
-const sass = gulpSass(dartSass);
+const gulpSassCompiler = gulpSass(dartSass);
 import autoprefixer from "autoprefixer";
 import postcss from "gulp-postcss";
 import sourcemaps from "gulp-sourcemaps";
 import notify from "gulp-notify";
 import plumber from "gulp-plumber";
+import fs from 'fs';
 import webpack from 'webpack';
 import webpackConfig from './webpack.config.js';
 import webpackStream from 'webpack-stream';
@@ -24,20 +25,22 @@ const errorHandler = (err) => {
     })(err);
 }
 
-gulp.task("assets", function() {
-  return gulp.src("./src/assets/**/*").pipe(gulp.dest("./dist/assets/"));
-});
+export const assets = function() {
+  return gulp
+    .src("./src/assets/**/*", { encoding: false })
+    .pipe(gulp.dest("./dist/assets"));
+};
 
-gulp.task("html", function() {
+export const html = function() {
   return gulp
     .src("./src/content/**/*.html")
     .pipe(
       plumber(errorHandler)
     )
     .pipe(gulp.dest("./dist/"));
-});
+};
 
-gulp.task("js", function() {
+export const js = function() {
   return gulp
     .src("src/js/main.js")
     .pipe(
@@ -47,9 +50,9 @@ gulp.task("js", function() {
     .pipe(uglify())
     .on('error', errorHandler)
     .pipe(gulp.dest("dist/js"));
-});
+};
 
-gulp.task("sass", () => {
+export const sass = () => {
   return gulp
     .src("./src/scss/main.scss")
     .pipe(
@@ -63,8 +66,8 @@ gulp.task("sass", () => {
       })
     )
     .pipe(sourcemaps.init())
-    .pipe(sass())
-    .on("error", sass.logError)
+    .pipe(gulpSassCompiler())
+    .on("error", gulpSassCompiler.logError)
     .pipe(
       postcss([
         autoprefixer({ grid: true })
@@ -73,22 +76,28 @@ gulp.task("sass", () => {
     .pipe(sourcemaps.write("."))
     .pipe(gulp.dest("./dist/css"))
     .pipe(browserSync.stream());
+};
+
+export const serve = gulp.series(gulp.parallel(sass, html, js, assets), (done) => {
+  browserSync.init({
+    server: "./dist",
+    open: true // set to false to disable browser autostart
+  });
+  gulp.watch("src/scss/**/*", gulp.series(sass));
+  gulp.watch("src/content/**/*.html", gulp.series(html));
+  gulp.watch("src/js/*.js", gulp.series(js));
+  gulp.watch("src/assets/**/*", gulp.series(assets));
+  gulp.watch("dist/**/*").on("change", browserSync.reload);
+  done();
 });
 
-gulp.task(
-  "serve",
-  gulp.series("sass", "html", "js", "assets", function() {
-    browserSync.init({
-      server: "./dist",
-      open: true // set to false to disable browser autostart
-    });
-    gulp.watch("src/scss/**/*", gulp.series("sass"));
-    gulp.watch("src/content/**/*.html", gulp.series("html"));
-    gulp.watch("src/js/*.js", gulp.series("js"));
-    gulp.watch("src/assets/**/*", gulp.series("assets"));
-    gulp.watch("dist/**/*").on("change", browserSync.reload);
-  })
-);
+import { execSync } from 'child_process';
 
-gulp.task("build", gulp.series("sass", "html", "js", "assets"));
-gulp.task("default", gulp.series("serve"));
+export const build = gulp.series(sass, html, js, assets);
+
+export const test = gulp.series(build, (done) => {
+  execSync('node scripts/validate-png-headers.js', { stdio: 'inherit' });
+  done();
+});
+
+export default gulp.series(serve);
