@@ -350,6 +350,10 @@ body {
   }
 }
 
+strong {
+  font-weight: 500;
+}
+
 .card {
   background-color: #F8F8F8;
   border-radius: 16px;
@@ -374,7 +378,6 @@ body {
 }
 .person__distinction {
   color: #ED6D05;
-  font-weight: 300;
 }
 .person__header {
   font-family: Arial, Helvetica, sans-serif;
@@ -399,7 +402,7 @@ body {
   color: #FA709A;
   font-size: 18px;
   font-style: italic;
-  font-weight: 500;
+  font-weight: 600;
   -webkit-text-fill-color: transparent;
 }
 @supports (-webkit-background-clip: text) {
