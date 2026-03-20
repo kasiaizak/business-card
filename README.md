@@ -29,3 +29,7 @@ Po sklonowaniu repozytorium na swój komputer wchodzimy do głównego katalogu p
 #### Kończenie pracy
 
 Aby przerwać pracę *gulp* wciskamy kombinację klawiszy **CTRL** + **C**.
+
+## Deploy na produkcję
+
+`npm run deploy`
