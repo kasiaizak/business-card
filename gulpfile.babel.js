@@ -4,7 +4,10 @@ import gulp from "gulp";
 import babel from "gulp-babel";
 import uglify from "gulp-uglify";
 import browserSync from "browser-sync";
-import sass from "gulp-sass";
+import gulpSass from "gulp-sass";
+import dartSass from "sass";
+
+const sass = gulpSass(dartSass);
 import autoprefixer from "autoprefixer";
 import postcss from "gulp-postcss";
 import sourcemaps from "gulp-sourcemaps";
@@ -13,8 +16,6 @@ import plumber from "gulp-plumber";
 import webpack from 'webpack';
 import webpackConfig from './webpack.config.js';
 import webpackStream from 'webpack-stream';
-
-sass.compiler = require("node-sass");
 
 const errorHandler = (err) => {
     notify.onError({
