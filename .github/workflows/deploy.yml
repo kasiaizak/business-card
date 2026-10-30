@@ -97,7 +97,7 @@ jobs:
               set net:timeout 20;
 
               mirror -R --verbose --parallel=2 \
-                deploy_bundle \"$SFTP_TARGET\";
+                deploy_bundle $SFTP_TARGET;
 
               bye;
             "
