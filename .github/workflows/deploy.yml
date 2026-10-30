@@ -96,7 +96,7 @@ jobs:
               set net:max-retries 2;
               set net:timeout 20;
 
-              mirror -R --dry-run --verbose --parallel=2 \
+              mirror -R --verbose --parallel=2 \
                 deploy_bundle \"$SFTP_TARGET\";
 
               bye;
