@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "predeploy": "gulp build",
-    "deploy": "gh-pages -d dist -b page",
+    "deploy": "node scripts/prepare-page.cjs && gh-pages -d dist -b page --dotfiles",
     "test:img": "node scripts/validate-img-headers.js",
     "test": "npm run test:img"
   },
