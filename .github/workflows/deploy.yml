@@ -41,14 +41,27 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y lftp
 
-      - name: Configure known_hosts
+      - name: Configure SSH host verification
         env:
           HOST_KEYS: ${{ secrets.SFTP_KNOWN_HOSTS }}
+        shell: bash
         run: |
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-          printf '%s\n' "$HOST_KEYS" > ~/.ssh/known_hosts
-          chmod 600 ~/.ssh/known_hosts
+          set -euo pipefail
+
+          mkdir -p "$HOME/.ssh"
+          chmod 700 "$HOME/.ssh"
+
+          printf '%s\n' "$HOST_KEYS" > "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/known_hosts"
+
+          cat > "$HOME/.ssh/config" <<'EOF'
+          Host *
+            StrictHostKeyChecking yes
+            UserKnownHostsFile ~/.ssh/known_hosts
+            BatchMode no
+          EOF
+
+          chmod 600 "$HOME/.ssh/config"
 
       - name: Prepare deployment files
         run: |
@@ -82,8 +95,9 @@ jobs:
               set cmd:fail-exit yes;
               set net:max-retries 2;
               set net:timeout 20;
-              set sftp:connect-program \"ssh -a -x -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts\";
-              mirror -R --verbose --parallel=2 \
+
+              mirror -R --dry-run --verbose --parallel=2 \
                 deploy_bundle \"$SFTP_TARGET\";
+
               bye;
             "
